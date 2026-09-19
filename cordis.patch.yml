@@ -1,0 +1,44 @@
+# dsh-music-player bundle layer: mounts the self-contained music player as one
+# plugin row, so the model can search a song by name and play it on this
+# machine's speakers.
+#
+# Nothing else is required to listen: the plugin decodes audio and renders it
+# through node-web-audio-api (prebuilt binary, ships with the package). There is
+# no dependency on an external player binary or on a companion music app.
+#
+# An account is optional but decisive for catalogue coverage — searching works
+# anonymously, while the original studio recording of a popular song streams
+# only as a 60-second excerpt without one. See README.md.
+- insert:
+    - id: dsh-music-player
+      name: 'dsh-music-player'
+      config:
+        # Master volume in percent, applied to every track. Deliberately
+        # conservative: a tool call can start audio with nobody watching the
+        # machine, so the first note must not be a jump scare.
+        volume: 60
+        # Preferred audio quality: auto | 128 | 320 | flac.
+        # `auto` takes the best tier a track actually offers.
+        quality: auto
+        # How many search hits to consider when matching a spoken song name.
+        searchLimit: 8
+        # Per-request budget for the search and resolve calls, in milliseconds.
+        timeoutMs: 20000
+        # Refuse tracks longer than this. A decoded track is held in memory as
+        # raw PCM, so a stray multi-hour stream would cost gigabytes.
+        maxTrackMinutes: 12
+        # Which output device to render to:
+        #   auto    (default) first real output, skipping virtual cables
+        #   default let Windows decide
+        #   <text>  a device label fragment or a raw device id
+        #
+        # `auto` exists because a machine with VB-Audio Cable or a voice-changer
+        # driver installed can have its default playback device pointing at a
+        # virtual sink: audio then renders perfectly and the room stays silent.
+        sink: auto
+        # Kugou account session written by `npm run login`. Searching works
+        # anonymously, but the original studio recording of a popular song
+        # answers with only a 60-second excerpt unless the request carries an
+        # account — this file is what makes originals playable. Leave null to
+        # use the default, <pluginDir>/.session.json.
+        sessionFile: null

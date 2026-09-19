@@ -1,0 +1,14 @@
+# Account session written by `npm run login`. Contains a Kugou account token —
+# never commit it, and never copy it into a profile config or a bug report.
+.session.json
+.session.json.*
+
+node_modules/
+*.log
+
+# Temporary QR code PNG written by `music_login` qr_start / `npm run login`.
+kugou-login-qr.png
+
+# Local probes / scratch output during development.
+probe*.txt
+*.tmp
