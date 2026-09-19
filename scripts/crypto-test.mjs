@@ -47,7 +47,7 @@ check('AES 用错 key 不会静默成功', (() => {
   }
 })());
 
-// ---- sealed payload (the login credential blob) ---------------------------
+// ---- sealed payload (the login credential blob) --------------------------
 const sealed = sealPayload(JSON.stringify({ mobile: '13800000000', code: '123456' }));
 check('sealPayload 返回 hex 与 16 位密钥', /^[0-9a-f]+$/.test(sealed.str) && sealed.secret.length === 16, `secret=${sealed.secret}`);
 check('openPayload 能还原原文', (() => {
