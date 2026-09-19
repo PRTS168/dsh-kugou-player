@@ -43,7 +43,7 @@ function finish(session, device) {
     console.log(`   userid   : ${saved.userid}`);
     console.log(`   vip_type : ${saved.vipType}`);
     console.log(`   文件     : ${sessions.file}`);
-    console.log('\n插件按文件修改时间自动重读，通常不用重启。现在可以试原版了。\n');
+    console.log('\n插件按文件修改时间自动重读，通常不用重启。现在可以试《水手》原版了。\n');
   });
 }
 

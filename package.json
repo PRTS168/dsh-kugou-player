@@ -1,7 +1,7 @@
 {
   "name": "dsh-music-player",
   "version": "0.1.0",
-  "description": "Play network music from inside DSH — a self-contained music player plugin that registers LLM tools for searching a song by name, playing it, looping one track, and pausing/resuming. No external player, no companion app.",
+  "description": "Play network music from inside DSH — a self-contained music player plugin that registers LLM tools for searching a song by name, playing it, looping one track, and pausing/resuming. No external player, no companion app: audio is decoded and rendered by the plugin itself. 让 DSH 自己放网络音乐：按歌名搜索播放、单曲循环、暂停继续，不依赖任何外部软件。",
   "license": "MIT",
   "type": "module",
   "main": "./lib/index.js",
@@ -43,6 +43,10 @@
     "smoke": "node scripts/smoke.mjs",
     "smoke:audible": "node scripts/smoke.mjs --audible",
     "test": "node scripts/crypto-test.mjs && node scripts/schema-check-test.mjs && node scripts/registration-test.mjs && node scripts/match-test.mjs",
+    "test:crypto": "node scripts/crypto-test.mjs",
+    "test:schema": "node scripts/schema-check-test.mjs",
+    "test:registration": "node scripts/registration-test.mjs",
+    "test:match": "node scripts/match-test.mjs",
     "devices": "node scripts/list-devices.mjs",
     "tone": "node scripts/tone-probe.mjs",
     "tone:all": "node scripts/tone-probe.mjs --all"

@@ -50,8 +50,11 @@ const check = (label, ok, detail = '') => {
 
 // ---------------------------------------------------------------------------
 // Strict JSON Schema walk — mirrors what a provider rejects outright.
+// Shared with (and unit-tested by) scripts/schema-check-test.mjs so the two
+// cannot drift apart.
 // ---------------------------------------------------------------------------
 
+// ---------------------------------------------------------------------------
 console.log(`\n=== dsh-music-player registration test ===\n`);
 check('插件导出 name/inject/apply', name === 'dsh-music-player' && Array.isArray(inject) && typeof apply === 'function');
 
@@ -121,7 +124,8 @@ check('空关键词被拒绝', emptyQuery.count === 0 && emptyQuery.message.incl
 
 // ---- music_login -----------------------------------------------------------
 // Every branch below must answer WITHOUT touching the network: a missing
-// argument is a conversation mistake, not a reason to send an SMS.
+// argument is a conversation mistake, not a reason to send an SMS. If these
+// ever hang, the tool started calling the login service on bad input.
 const loginDef = registered.find((d) => d.name === 'music_login');
 
 const loginStatus = await loginDef.execute({ action: 'status' }, {});

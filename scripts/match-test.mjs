@@ -65,3 +65,4 @@ for (const [query, ratio] of truncationCases) {
 
 console.log(`\n${pass}/${total} 通过`);
 if (pass !== total) process.exitCode = 1;
+
