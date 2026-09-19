@@ -1,25 +1,36 @@
 # dsh-music-player
 
-DSH 的音乐播放插件。注册几个工具，让模型按歌名搜索并在本机出声。
+```
+ track   晴天 — 周杰伦
+ quality flac · 320 · 128
+ engine  lite (concept client)
+ cdn     direct → fallback
+ state   playing  01:23 / 04:29
+```
 
-自包含：不依赖 ffplay / mpv / 外部客户端，随包带取流引擎，进程内解码。
+DSH 的音乐播放插件。注册几个工具，让模型按歌名搜索并在本机出声。自包含：不依赖 ffplay / mpv / 外部客户端。
 
-## 特性
+![release](https://img.shields.io/badge/release-v0.1.0-2ea44f) ![license](https://img.shields.io/badge/license-MIT-blue) ![node](https://img.shields.io/badge/node-%E2%89%A522-gray) ![platform](https://img.shields.io/badge/platform-windows%20x64-gray)
 
-- 自包含取流：随包引擎 + 公开 CDN 兜底，无外部播放器依赖
+[是什么](#是什么) · [60 秒上手](#60-秒上手) · [工具](#工具) · [登录](#登录) · [配置](#配置) · [结构](#结构) · [致谢](#致谢)
+
+---
+
+## 是什么
+
+把酷狗的搜索与取流接成 DSH 的一组工具。从一句“放首晴天”到扬声器出声，全程不经过外部播放器：
+
+```
+you → play_music → kugou search → lite engine → cdn → node-web-audio-api → speakers
+```
+
 - 走酷狗概念版（lite）客户端协议，与正规第三方客户端同路径，非私有接口破解
-- 扫码登录获取原版 / VIP，设备身份本地持久化
-- 进程内 AudioContext 播放：无缝单曲循环、采样级暂停 / 继续
-- 自动跳过试听片段、Live / 翻唱，优先完整录音室版本
+- 随包引擎负责原版 / VIP；不可用或被风控时回退公开 CDN
+- 进程内解码，无缝单曲循环、采样级暂停 / 继续
+- 自动跳过试听片段与翻唱，优先完整录音室版本
 - 自动识别并避开虚拟音频设备（VB-Cable、VoiceMeeter 等）
-- 全部工具 schema 经严格校验，坏 schema 不会拖垮整个对话轮次
 
-## 要求
-
-- Node.js >= 22
-- Windows x64
-
-## 安装
+## 60 秒上手
 
 ```bash
 git clone https://github.com/PRTS168/dsh-music-player.git
@@ -28,7 +39,7 @@ npm install
 dsh plugin add ./dsh-music-player
 ```
 
-重启 DSH。
+重启 DSH，然后说“放首晴天”。原版需要登录：调 `music_login` `qr_start` 扫码。
 
 ## 工具
 
@@ -40,23 +51,19 @@ dsh plugin add ./dsh-music-player
 | `search_music` | `query`, `limit?` | 列出候选供选择 |
 | `music_login` | `action` | `qr_start` `qr_poll` `status` `logout` |
 
-自然语言即可：“放首晴天”“暂停”“声音小一点”“单曲循环”。
-
 ## 登录
 
-原版 / VIP 曲目未登录仅试听片段。调用 `music_login` `qr_start`，用酷狗 App 扫码确认，再 `qr_poll`。会话写入 `.session.json`（已 gitignore），登录一次长期有效。
+未登录只能试听 60 秒。调 `qr_start` 拿二维码，用酷狗 App 扫，再 `qr_poll`。会话写入 `.session.json`（已 gitignore），登录一次长期有效。
 
-命令行等价方式：
+命令行等价：
 
 ```bash
 npm run login
 ```
 
-未登录也能搜索和播放免费 / 低音质曲目，原版会自动回退到可播版本。
-
 ## 配置
 
-在 profile 的 `cordis.patch.yml` 覆盖：
+在 `cordis.patch.yml` 覆盖：
 
 ```yaml
 - id: dsh-music-player
@@ -72,18 +79,16 @@ npm run login
 ## 结构
 
 ```
-lib/index.js     工具注册
-lib/kugou.js     搜索、取流、候选排序
-lib/engine.js    随包引擎：privilege 预热后取直链
-lib/player.js    AudioContext 播放状态机
-lib/login.js     扫码登录
-lib/session.js   本地会话
-lib/sink.js      输出设备选择
+lib/index.js    工具注册
+lib/kugou.js    搜索、取流、候选排序
+lib/engine.js   随包引擎：privilege 预热后取直链
+lib/player.js   AudioContext 播放状态机
+lib/login.js    扫码登录
+lib/session.js  本地会话
+lib/sink.js     输出设备选择
 ```
 
-取流顺序：随包引擎先尝试（`/privilege/lite` 授权预热 → `/song/url` 取直链），不可用或被风控时回退公开 CDN。
-
-## 测试
+测试：
 
 ```bash
 npm test        # 加密 / schema / 匹配 / 注册 回归
@@ -96,10 +101,4 @@ npm run smoke   # 全链路静默测试
 - [KuGouMusicApi](https://github.com/MakcRe/KuGouMusicApi)（MIT）—— 设备注册、签名、加密算法
 - [node-web-audio-api](https://github.com/ircam-ismm/node-web-audio-api) —— 进程内音频解码与播放
 
-## 免责
-
-仅供个人学习研究。音源来自酷狗公开接口，版权归原方所有。`bin/app_win.exe` 为第三方二进制，版权归原作者。请支持正版。
-
-## License
-
-MIT
+仅供个人学习研究，音源版权归原方所有，`bin/app_win.exe` 为第三方二进制。请支持正版。MIT。
