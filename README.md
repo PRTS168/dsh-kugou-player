@@ -9,7 +9,7 @@ DSH 的音乐播放插件。给模型注册几个工具，按歌名搜索并播�
 要求 Node.js >= 22、Windows x64。
 
 ```bash
-git clone <your-repo>
+git clone https://github.com/PRTS168/dsh-music-player.git
 cd dsh-music-player
 npm install
 ```
