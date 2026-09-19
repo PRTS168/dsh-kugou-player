@@ -12,7 +12,7 @@ DSH 的音乐播放插件。注册几个工具，让模型按歌名搜索并在�
 
 ![release](https://img.shields.io/badge/release-v0.1.0-2ea44f) ![license](https://img.shields.io/badge/license-MIT-blue) ![node](https://img.shields.io/badge/node-%E2%89%A522-gray) ![platform](https://img.shields.io/badge/platform-windows%20x64-gray)
 
-[是什么](#是什么) · [60 秒上手](#60-秒上手) · [工具](#工具) · [登录](#登录) · [配置](#配置) · [结构](#结构) · [致谢](#致谢)
+[是什么](#是什么) · [音质与VIP](#音质与vip) · [60 秒上手](#60-秒上手) · [工具](#工具) · [登录](#登录) · [配置](#配置) · [结构](#结构) · [致谢](#致谢)
 
 ---
 
@@ -24,11 +24,19 @@ DSH 的音乐播放插件。注册几个工具，让模型按歌名搜索并在�
 you → play_music → kugou search → lite engine → cdn → node-web-audio-api → speakers
 ```
 
-- 走酷狗概念版（lite）客户端协议，与正规第三方客户端同路径，非私有接口破解
 - 随包引擎负责原版 / VIP；不可用或被风控时回退公开 CDN
 - 进程内解码，无缝单曲循环、采样级暂停 / 继续
 - 自动跳过试听片段与翻唱，优先完整录音室版本
 - 自动识别并避开虚拟音频设备（VB-Cable、VoiceMeeter 等）
+
+## 音质与 VIP
+
+随包引擎走酷狗**概念版（lite）客户端**的设备通道——和正规第三方客户端同一条路，不是破解私有接口。原版录音室版本和 flac / 320kbps 直接解析，**不需要你自己开酷狗会员**。
+
+- 不登录：靠随包引擎即可出原版 / 无损；引擎不可用时回退到公开免费源（128 / 320，部分曲目仅试听片段）。
+- 扫码登录：让公开 CDN 兜底路径也带上你自己的账号权益，与随包引擎并行；登录本身不绑定付费会员。
+
+> 通道依赖酷狗侧策略，可能随版本调整；仅供个人学习研究。
 
 ## 60 秒上手
 
@@ -39,7 +47,7 @@ npm install
 dsh plugin add ./dsh-music-player
 ```
 
-重启 DSH，然后说“放首晴天”。原版需要登录：调 `music_login` `qr_start` 扫码。
+重启 DSH，然后说“放首晴天”。
 
 ## 工具
 
@@ -53,7 +61,7 @@ dsh plugin add ./dsh-music-player
 
 ## 登录
 
-未登录只能试听 60 秒。调 `qr_start` 拿二维码，用酷狗 App 扫，再 `qr_poll`。会话写入 `.session.json`（已 gitignore），登录一次长期有效。
+未登录时，公开 CDN 路径对热门原版只给 60 秒试听。调 `qr_start` 拿二维码，用酷狗 App 扫，再 `qr_poll`。会话写入 `.session.json`（已 gitignore），登录一次长期有效。
 
 命令行等价：
 
